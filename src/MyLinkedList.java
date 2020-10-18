@@ -6,19 +6,44 @@
  */
 public class MyLinkedList<E> {
 
-    private Node head;
+    private Node<E> head;
     private int numNodes;
 
     public MyLinkedList() {
+    }
 
+    public MyLinkedList(E element) {
+        this.head = new Node<>(element);
     }
 
     public void add(int index, E element) {
-        throw new UnsupportedOperationException();
+        Node<E> leftNode = head;
+        for (int i = 0; i < index-1 && leftNode.next != null; i++) {
+            leftNode = leftNode.next; // LeftNode
+        }
+        Node<E> rightNode = leftNode.next; // RightNode
+        leftNode.next = new Node<>(element); // NewNode
+        leftNode.next.next = rightNode;
+        numNodes++;
     }
 
     public boolean add(E element) {
-        throw new UnsupportedOperationException();
+        Node<E> temp = head;
+        head = new Node<>(element);
+        head.next = temp;
+        numNodes++;
+        return true;
+    }
+
+    public E remove(int index) {
+        Node<E> prev = head;
+        for (int i = 0; i < index-1; i++) {
+            prev = prev.next;
+        }
+        Node<E> targetNode = prev.next;
+        prev.next = targetNode.next;
+        numNodes--;
+        return targetNode.getData();
     }
 
     public int size() {
@@ -26,18 +51,22 @@ public class MyLinkedList<E> {
     }
 
     public E get(int index) {
-        throw new UnsupportedOperationException();
+        Node<E> temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp.next;
+        }
+        return temp.getData();
     }
 
-    public class Node {
-        Node next;
-        Object data;
+    private static class Node<E> {
+        private Node<E> next;
+        private E data;
 
-        public Node(Object data) {
-            this.data = data;
+        public Node(E element) {
+            this.data = element;
         }
 
-        public Object getData() {
+        public E getData() {
             return data;
         }
     }
